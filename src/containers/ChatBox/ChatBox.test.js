@@ -83,6 +83,21 @@ describe('ChatBox component', () => {
     expect(wrapper.instance().messageChatBot).toHaveBeenCalled();
   });
 
+  it('should not call addMessage, messageChatBot, or clear state when calling handleSubmit', () => {
+    wrapper = mount(<ChatBox
+      addMessage={mockAddMessage}
+      messages={mockMessages}
+      hasErrored={mockHasErrored}
+    />);
+    wrapper.instance().messageChatBot = jest.fn();
+
+    wrapper.setState({ message: 'WADDUP COVERAGE' });
+    wrapper.instance().handleSubmit({ key: 'none' });
+
+    expect(wrapper.state('message')).toEqual('WADDUP COVERAGE');
+    expect(wrapper.instance().messageChatBot).not.toHaveBeenCalled()
+  });
+
   it('should call postMessage and addMessage when calling messageChatBot', async () => {
     wrapper = mount(<ChatBox
       messages={mockMessages}
