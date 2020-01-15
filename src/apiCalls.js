@@ -14,12 +14,26 @@ export const startConversation = async feeling => {
   }
 
   const data = await response.json();
-  console.log(data)
   return data;
 }
 
 export const postMessage = async newMessage => {
+ const url = 'https://drwatson-api.herokuapp.com/api/message';
+ const options = {
+   method: 'POST',
+   headers: {
+     'Content-Type': 'application/json'
+   },
+   body: JSON.stringify({ newMessage })
+ };
 
+ const response = await fetch(url, options);
+ if (!response.ok) {
+   throw Error('Oh no! I can not respond to that. Try something else')
+ }
+
+ const data = await response.json();
+ return data;
 }
 
 export const endConversation = async () => {
