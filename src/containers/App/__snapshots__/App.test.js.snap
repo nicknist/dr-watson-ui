@@ -7,10 +7,7 @@ exports[`App component should match the snapshot with a ChatBox if the user has 
   <Connect(Header)
     signOut={[Function]}
   />
-  <Connect(ChatBox)
-    addMessage={[Function]}
-    messages={Array []}
-  />
+  <Connect(ChatBox) />
 </div>
 `;
 
@@ -21,8 +18,6 @@ exports[`App component should match the snapshot with a WelcomeModal if the user
   <Connect(Header)
     signOut={[Function]}
   />
-  <Connect(WelcomeModal)
-    addMessage={[Function]}
-  />
+  <Connect(WelcomeModal) />
 </div>
 `;
