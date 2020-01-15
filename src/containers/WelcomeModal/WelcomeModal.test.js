@@ -75,7 +75,7 @@ describe('WelcomeModal component', () => {
   });
 
   it('should call startConversation and addMessage with correct arguments when connectToChatBot is called', async () => {
-    const mockMessage = { 
+    const mockMessage = {
       message: 'Hi there, my name is Dr. Watson. I understand that you have been feeling happy. That is super exciting to hear!'
     };
     startConversation.mockImplementation(() => {
@@ -97,6 +97,41 @@ describe('WelcomeModal component', () => {
     await wrapper.instance().connectToChatBot();
 
     expect(mockHasErrored).toHaveBeenCalledWith('fetch failed.');
+  });
+
+  it('should call connectToChatBot when checkInputs returns true', () => {
+    const mockEvent = {
+      preventDefault: jest.fn()
+    };
+    wrapper.setState({ firstName: 'Eric', lastName: 'Robbie', feeling: 'SUPER' });
+
+    wrapper.instance().connectToChatBot = jest.fn();
+    wrapper.instance().handleSubmit(mockEvent);
+
+    expect(wrapper.instance().connectToChatBot).toHaveBeenCalled();
+  });
+
+  it('should not call connectToChatBot when checkInputs returns false', () => {
+    const mockEvent = {
+      preventDefault: jest.fn()
+    };
+    wrapper.setState({ firstName: '' });
+
+    wrapper.instance().connectToChatBot = jest.fn();
+    wrapper.instance().handleSubmit(mockEvent);
+
+    expect(wrapper.instance().connectToChatBot).not.toHaveBeenCalled();
+  });
+
+  it('should call checkInputs when handleSubmit is called', () => {
+    const mockEvent = {
+      preventDefault: jest.fn()
+    };
+    wrapper.instance().checkInputs = jest.fn();
+
+    wrapper.instance().handleSubmit(mockEvent);
+
+    expect(wrapper.instance().checkInputs).toHaveBeenCalled();
   });
 
   it('should run handleChange when the inputs or select detect a change', () => {
@@ -124,7 +159,7 @@ describe('WelcomeModal component', () => {
     wrapper.find('input').at(0).simulate('change', mockFirstNameEvent);
     wrapper.find('input').at(1).simulate('change', mockLastNameEvent);
     wrapper.find('select').simulate('change', mockFeelingEvent);
-    
+
     expect(wrapper.instance().handleChange).toHaveBeenCalledWith(mockFirstNameEvent);
     expect(wrapper.instance().handleChange).toHaveBeenCalledWith(mockLastNameEvent);
     expect(wrapper.instance().handleChange).toHaveBeenCalledWith(mockFeelingEvent);
@@ -138,6 +173,33 @@ describe('WelcomeModal component', () => {
     wrapper.find('button').simulate('click', mockEvent);
 
     expect(wrapper.instance().handleSubmit).toHaveBeenCalled();
+  });
+
+  it('should change error state when there is no firstName', () => {
+    wrapper.setState({ firstName: '' });
+
+    expect(wrapper.instance().checkInputs()).toEqual(false);
+    expect(wrapper.state('error')).toEqual('Please Enter a First Name');
+  });
+
+  it('should change error state when there is a firstName but no last name', () => {
+    wrapper.setState({ firstName: 'Eric', lastName: '' });
+
+    expect(wrapper.instance().checkInputs()).toEqual(false);
+    expect(wrapper.state('error')).toEqual('Please Enter a Last Name');
+  });
+
+  it('should change error state when there is a firstName, lastName, but no feeling', () => {
+    wrapper.setState({ firstName: 'Eric', lastName: 'Robbie', feeling: '' });
+
+    expect(wrapper.instance().checkInputs()).toEqual(false);
+    expect(wrapper.state('error')).toEqual('Please Choose a Feeling');
+  });
+
+  it('should return true if there is a firstName, lastName, and feeling', () => {
+    wrapper.setState({ firstName: 'Eric', lastName: 'Robbie', feeling: 'SUPER' });
+
+    expect(wrapper.instance().checkInputs()).toEqual(true)
   });
 });
 
