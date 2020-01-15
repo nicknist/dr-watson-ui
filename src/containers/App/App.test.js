@@ -60,7 +60,7 @@ describe('App component', () => {
 });
 
 describe('mapStateToProps', () => {
-  it('should return an object with the user information and messages', () => {
+  it('should return an object with the user information', () => {
     const mockUser = {
       id: 1568665187737,
       firstName: "Travis",
@@ -68,19 +68,12 @@ describe('mapStateToProps', () => {
       feeling: "tired"
     };
 
-    const mockMessages = [{
-      message: 'Hi there, my name is Dr. Watson. I understand that you have been feeling happy. That is super exciting to hear!',
-      isUser: false,
-    }]
-
     const mockState = {
       user: mockUser,
-      messages: mockMessages,
       errorMsg: ''
     };
     const expected = {
-      user: mockUser,
-      messages: mockMessages
+      user: mockUser
     }
 
     const mappedProps = mapStateToProps(mockState);
@@ -106,16 +99,6 @@ describe('mapDispatchToProps', () => {
 
     const mappedProps = mapDispatchToProps(mockDispatch);
     mappedProps.hasErrored('fetch failed');
-
-    expect(mockDispatch).toHaveBeenCalledWith(actionToDispatch);
-  });
-
-  it('should call dispatch when addMessage has been called', () => {
-    const mockDispatch = jest.fn();
-    const actionToDispatch = addMessage({ message: 'waddup', isUser: true });
-
-    const mappedProps = mapDispatchToProps(mockDispatch);
-    mappedProps.addMessage({ message: 'waddup', isUser: true });
 
     expect(mockDispatch).toHaveBeenCalledWith(actionToDispatch);
   });
