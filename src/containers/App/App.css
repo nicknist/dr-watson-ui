@@ -11,6 +11,8 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  background: #ffffff url('https://static.tvtropes.org/pmwiki/pub/images/johnseries4.jpg');
+  background-size: cover;
 }
 
 .App-link {
